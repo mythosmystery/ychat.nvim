@@ -1,0 +1,5 @@
+---@class YChat
+---@field setup fun(self:LazyPlugin) Performs initial setup
+---@field toggle_chat fun(self:LazyPlugin) Opens the yChat buffer in a vertical split
+---@field send fun(self:LazyPlugin) Gets input and sends the message
+---@field reload fun() Reloads the plugin (for development)
