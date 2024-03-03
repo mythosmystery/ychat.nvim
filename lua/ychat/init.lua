@@ -2,7 +2,7 @@
 local M = {}
 local username = "Anonymous"
 
-M.send = function ()
+M.send = function()
   local message = vim.fn.input("Message: ")
   if message == "" then
     return
@@ -12,19 +12,24 @@ M.send = function ()
 
   local handle
 
-  local function onexit(code, signal)
+  local function onexit()
     handle:close()
   end
 
   handle = vim.loop.spawn("node", {
     args = { "index.js", "write", message },
     stdio = { nil, nil, nil },
-    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client"
+    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client",
   }, onexit)
 end
 
 M.toggle_chat = function()
-  username = vim.fn.input("Username: ")
+  if username == "Anonymous" then
+    username = vim.fn.input("Username: ")
+    if username == "" or username == nil then
+      username = "Anonymous"
+    end
+  end
 
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_name(buf, "yChat - " .. username)
@@ -71,14 +76,13 @@ M.toggle_chat = function()
   handle = vim.loop.spawn("node", {
     args = { "index.js", "read" },
     stdio = { nil, stdout, stderr },
-    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client"
+    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client",
   }, onexit)
 
   vim.loop.read_start(stdout, onread)
   vim.loop.read_start(stderr, onread)
 end
 
-M.setup = function()
-end
+M.setup = function() end
 
 return M
