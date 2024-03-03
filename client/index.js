@@ -45,7 +45,7 @@ function write(server, message) {
   const socket = io(server);
 
   socket.on("connect", () => {
-    console.log(`Connected to server with id: ${socket.id}`);
+    console.log(`Connected to yChat!`);
     socket.send(message, (ack) => {
       socket.disconnect();
       process.exit(0);
@@ -57,7 +57,7 @@ function read(server) {
   const socket = io(server);
 
   socket.on("connect", () => {
-    console.log(`Connected to server with id: ${socket.id}`);
+    console.log(`Connected to yChat!`);
   });
 
   socket.on("message", (data) => {

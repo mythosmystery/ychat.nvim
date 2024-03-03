@@ -1,11 +1,14 @@
 ---@class YChat
 local M = {}
+local username = "Anonymous"
 
 M.send = function ()
   local message = vim.fn.input("Message: ")
   if message == "" then
     return
   end
+
+  message = username .. ": " .. message
 
   local handle
 
@@ -14,15 +17,17 @@ M.send = function ()
   end
 
   handle = vim.loop.spawn("node", {
-    args = { "client/index.js", "write", message },
+    args = { "index.js", "write", message },
     stdio = { nil, nil, nil },
-    cwd = "~/Documents/ychat.nvim",
+    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client"
   }, onexit)
 end
 
 M.toggle_chat = function()
+  username = vim.fn.input("Username: ")
+
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_name(buf, "yChat")
+  vim.api.nvim_buf_set_name(buf, "yChat - " .. username)
 
   vim.api.nvim_command("vsplit")
   vim.api.nvim_win_set_buf(0, buf)
@@ -64,9 +69,9 @@ M.toggle_chat = function()
   end
 
   handle = vim.loop.spawn("node", {
-    args = { "client/index.js", "read" },
+    args = { "index.js", "read" },
     stdio = { nil, stdout, stderr },
-    cwd = "~/Documents/ychat.nvim/client",
+    cwd = "/Users/hunterbarton/Documents/ychat.nvim/client"
   }, onexit)
 
   vim.loop.read_start(stdout, onread)
